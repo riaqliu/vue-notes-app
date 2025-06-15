@@ -42,10 +42,18 @@ let win: BrowserWindow | null = null
 const preload = path.join(__dirname, '../preload/index.mjs')
 const indexHtml = path.join(RENDERER_DIST, 'index.html')
 
+const windowParams: object = {
+  width: 600,
+  heigth: 800,
+  resizable: false
+}
+
 async function createWindow() {
   win = new BrowserWindow({
+    ...windowParams,
     title: 'Main window',
     icon: path.join(process.env.VITE_PUBLIC, 'favicon.ico'),
+    autoHideMenuBar: true,
     webPreferences: {
       preload,
       // Warning: Enable nodeIntegration and disable contextIsolation is not secure in production
