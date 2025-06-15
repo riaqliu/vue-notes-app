@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { reactive, computed } from 'vue';
 import Header from './Header.vue';
+import NotesPageNoteItem from './NotesPageNoteItem.vue';
 
 interface Note {
     uuid: number;
@@ -27,9 +28,12 @@ const minimizeButton = computed(() => {
     <div class="content">
         <Header/>
         <div class="body">
-            <div class="item note" v-for="note in notes">
-                {{note.textBody}}
-            </div>
+            <NotesPageNoteItem
+                class="item note"
+                v-for="note in notes"
+                :uuid="note.uuid"
+                :text-body="note.textBody"
+            />
             <button :class="{ min: minimizeButton }" class="item btn" @click="clickHandler">
                 +
             </button>
