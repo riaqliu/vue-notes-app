@@ -4,6 +4,8 @@ import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import os from 'node:os'
 
+process.env.NODE_ENV = 'development';
+
 const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -44,7 +46,7 @@ const indexHtml = path.join(RENDERER_DIST, 'index.html')
 
 const windowParams: object = {
   width: 600,
-  heigth: 800,
+  height: 800,
   resizable: false
 }
 
@@ -86,7 +88,19 @@ async function createWindow() {
   // win.webContents.on('will-navigate', (event, url) => { }) #344
 }
 
-app.whenReady().then(createWindow)
+app.whenReady().then(async () => {
+  if (VITE_DEV_SERVER_URL) {
+    try {
+      throw "TODO: add VUEJS Devtools";
+      console.info('Installed VueJS Devtools.');
+
+    } catch (e) {
+      console.error('Failed to install Vue Devtools:', e)
+    }
+  }
+
+  createWindow()
+})
 
 app.on('window-all-closed', () => {
   win = null

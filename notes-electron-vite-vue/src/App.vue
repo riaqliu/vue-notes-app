@@ -1,14 +1,11 @@
 <script setup lang="ts">
+import NotesPage from './components/NotesPage.vue';
+
 </script>
-
 <template>
-  <div>
-    <div>
-      Notes App
-    </div>
-
+  <div id="app">
+    <NotesPage/>
   </div>
 </template>
-
 <style>
 </style>
