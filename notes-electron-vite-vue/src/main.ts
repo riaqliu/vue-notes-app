@@ -3,8 +3,16 @@ import App from './App.vue'
 
 import './stylesheets/default.css'
 
-createApp(App)
-  .mount('#app')
+const app = createApp(App);
+
+
+app.directive('focus', {
+  mounted(el) {
+    el.focus();
+  }
+});
+
+app.mount('#app')
   .$nextTick(() => {
     postMessage({ payload: 'removeLoading' }, '*')
-  })
+  });

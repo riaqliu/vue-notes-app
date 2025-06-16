@@ -31,8 +31,9 @@ function createNote() {
 <template>
     <textarea
         v-if="isEditing"
-        id="text"
         v-model="textValue"
+        v-focus
+        id="text"
         @keydown="handleKeyDown"
     />
     <div v-else>
