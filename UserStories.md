@@ -2,7 +2,7 @@
 
 ## 📄 Basic Note Functionality
 
-- [ ] **User Story 1** – Create a new note
+- [x] **User Story 1** – Create a new note
 - [ ] **User Story 2** – Edit an existing note
 - [ ] **User Story 3** – Delete a note
 - [ ] **User Story 4** – View a list of all notes
