@@ -1,19 +1,47 @@
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { ref } from 'vue';
 
-defineProps<{
-    uuid?: number,
+const props = defineProps<{
+    uuid: number,
     textBody?: string
 }>()
 
-const isEditing = reactive<Boolean>(true);
+const emit = defineEmits<{
+    create: [uuid: number, newText: string]
+}>()
+
+const isEditing = ref(true);
+const textValue = ref('');
+
+function handleKeyDown(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+        if (!event.shiftKey) {
+            event.preventDefault();
+            createNote();
+        }
+    }
+}
+
+function createNote() {
+    emit('create', props.uuid, textValue.value);
+    isEditing.value = false;
+}
 
 </script>
 <template>
-    <input v-if="isEditing"/>
+    <textarea
+        v-if="isEditing"
+        id="text"
+        v-model="textValue"
+        @keydown="handleKeyDown"
+    />
     <div v-else>
         {{ textBody }}
     </div>
 </template>
 <style lang="scss" scoped>
+#text {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    resize: none;
+}
 </style>

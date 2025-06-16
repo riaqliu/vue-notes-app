@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, computed } from 'vue';
+import { reactive, ref, computed } from 'vue';
 import Header from './Header.vue';
 import NotesPageNoteItem from './NotesPageNoteItem.vue';
 
@@ -8,15 +8,21 @@ interface Note {
     textBody: string;
 }
 const notes = reactive<Note[]>([])
+const cnt = ref(0);
 
 function clickHandler() {
-    const cnt =  notes.length + 1;
+    cnt.value++;
     notes.push(
         {
-            uuid: cnt,
+            uuid: cnt.value,
             textBody: `Note ${cnt}`
         }
     )
+}
+
+function createNoteHandler(uuid: number, newText: string) {
+    const updatedNote = notes.find((note) => note.uuid === uuid);
+    if (updatedNote) updatedNote.textBody = newText;
 }
 
 const minimizeButton = computed(() => {
@@ -33,6 +39,7 @@ const minimizeButton = computed(() => {
                 v-for="note in notes"
                 :uuid="note.uuid"
                 :text-body="note.textBody"
+                @create="createNoteHandler"
             />
             <button :class="{ min: minimizeButton }" class="item btn" @click="clickHandler">
                 +
@@ -77,7 +84,7 @@ const minimizeButton = computed(() => {
 }
 
 .item {
-    height: 125px;
+    height: 145px;
     width: 125px;
     border-radius: 5px;
     border-width: 0;
@@ -90,7 +97,7 @@ const minimizeButton = computed(() => {
     font-size: 48px;
     transform: translateY(0);
     transition: width 0.15s ease;
-    height: 146px;
+    height: 166px;
     width: 146px;
     display: flex;
     align-items: center;
