@@ -29,7 +29,11 @@ function createNote() {
 
 </script>
 <template>
-    <div class="note-content" v-click-outside="() => isEditing = false">
+    <div
+        class="note-content" 
+        v-click-outside="() => isEditing=false"
+        @click="isEditing=true"
+    >
         <textarea
             v-if="isEditing"
             v-model="textValue"
@@ -39,7 +43,6 @@ function createNote() {
         />
         <div v-else class="display-wrapper">
             <p class="note-text">{{ textBody }}</p>
-            <button class="edit-btn" @click="isEditing=true">Edit</button>
         </div>
     </div>
 </template>
@@ -54,25 +57,8 @@ function createNote() {
     .display-wrapper {
         position: relative;
     }
-    &:hover .edit-btn {
-        opacity: 1;
-    }
 }
 
-.edit-btn {
-    position: absolute;
-    top: 0.05rem;
-    right: 0.05rem;
-    opacity: 0;
-    transition: opacity 0.2s ease;
-    display:flex;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 0.3rem 0.6rem;
-    border-radius: 0.3rem;
-    cursor: pointer;
-}
 
 #text {
     resize: none;
