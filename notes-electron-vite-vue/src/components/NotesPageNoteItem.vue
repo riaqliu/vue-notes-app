@@ -29,20 +29,56 @@ function createNote() {
 
 </script>
 <template>
-    <textarea
-        v-if="isEditing"
-        v-model="textValue"
-        v-focus
-        id="text"
-        @keydown="handleKeyDown"
-    />
-    <div v-else>
-        {{ textBody }}
+    <div class="note-content" v-click-outside="() => isEditing = false">
+        <textarea
+            v-if="isEditing"
+            v-model="textValue"
+            v-focus
+            id="text"
+            @keydown="handleKeyDown"
+        />
+        <div v-else class="display-wrapper">
+            <p class="note-text">{{ textBody }}</p>
+            <button class="edit-btn" @click="isEditing=true">Edit</button>
+        </div>
     </div>
 </template>
 <style lang="scss" scoped>
 #text {
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     resize: none;
+}
+
+.note-content {
+    position: relative;
+    .display-wrapper {
+        position: relative;
+    }
+    &:hover .edit-btn {
+        opacity: 1;
+    }
+}
+
+.edit-btn {
+    position: absolute;
+    top: 0.05rem;
+    right: 0.05rem;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    display:flex;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0.3rem 0.6rem;
+    border-radius: 0.3rem;
+    cursor: pointer;
+}
+
+#text {
+    resize: none;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background-color: transparent;
 }
 </style>

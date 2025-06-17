@@ -15,7 +15,7 @@ function clickHandler() {
     notes.push(
         {
             uuid: cnt.value,
-            textBody: `Note ${cnt}`
+            textBody: ''
         }
     )
 }
