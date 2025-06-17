@@ -7,7 +7,8 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-    create: [uuid: number, newText: string]
+    create: [uuid: number, newText: string],
+    delete: [uuid: number]
 }>()
 
 const isEditing = ref(true);
@@ -27,10 +28,14 @@ function createNote() {
     isEditing.value = false;
 }
 
+function deleteNote() {
+    emit('delete', props.uuid);
+}
+
 </script>
 <template>
     <div
-        class="note-content" 
+        class="note-content"
         v-click-outside="() => isEditing=false"
         @click="isEditing=true"
     >
@@ -43,6 +48,9 @@ function createNote() {
         />
         <div v-else class="display-wrapper">
             <p class="note-text">{{ textBody }}</p>
+            <button @click="deleteNote">
+                <img src="../assets/icon/delete.svg" alt="Delete" class="delete-icon"/>
+            </button>
         </div>
     </div>
 </template>

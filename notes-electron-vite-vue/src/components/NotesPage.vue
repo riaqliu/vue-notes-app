@@ -25,6 +25,13 @@ function createNoteHandler(uuid: number, newText: string) {
     if (updatedNote) updatedNote.textBody = newText;
 }
 
+function deleteNoteHandler(uuid: number) {
+    const idx = notes.findIndex((note) => note.uuid === uuid);
+    if (idx !== -1) {
+        notes.splice(idx, 1);
+    }
+}
+
 const minimizeButton = computed(() => {
     return notes.length > 0;
 })
@@ -40,6 +47,7 @@ const minimizeButton = computed(() => {
                 :uuid="note.uuid"
                 :text-body="note.textBody"
                 @create="createNoteHandler"
+                @delete="deleteNoteHandler"
             />
             <button :class="{ min: minimizeButton }" class="item btn" @click="clickHandler">
                 +
