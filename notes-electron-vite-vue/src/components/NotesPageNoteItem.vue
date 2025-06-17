@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
+import Button from '@/components/generic/Button.vue';
+
 const props = defineProps<{
     uuid: number,
     textBody?: string
@@ -48,9 +50,7 @@ function deleteNote() {
         />
         <div v-else class="display-wrapper">
             <p class="note-text">{{ textBody }}</p>
-            <button @click="deleteNote">
-                <img src="../assets/icon/delete.svg" alt="Delete" class="delete-icon"/>
-            </button>
+            <Button @click="deleteNote"/>
         </div>
     </div>
 </template>

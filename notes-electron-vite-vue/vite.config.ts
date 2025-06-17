@@ -4,6 +4,8 @@ import vue from '@vitejs/plugin-vue'
 import electron from 'vite-plugin-electron/simple'
 import pkg from './package.json'
 
+import path from 'path'
+
 // https://vitejs.dev/config/
 export default defineConfig(({ command }) => {
   fs.rmSync('dist-electron', { recursive: true, force: true })
@@ -70,5 +72,10 @@ export default defineConfig(({ command }) => {
       }
     })(),
     clearScreen: false,
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, './src'),
+      },
+    },
   }
 })

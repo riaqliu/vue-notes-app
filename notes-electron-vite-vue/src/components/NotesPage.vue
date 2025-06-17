@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive, ref, computed } from 'vue';
-import Header from './Header.vue';
-import NotesPageNoteItem from './NotesPageNoteItem.vue';
+import Header from '@/components/Header.vue';
+import NotesPageNoteItem from '@/components/NotesPageNoteItem.vue';
 
 interface Note {
     uuid: number;
