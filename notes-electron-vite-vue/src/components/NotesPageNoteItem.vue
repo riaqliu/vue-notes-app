@@ -26,8 +26,10 @@ function handleKeyDown(event: KeyboardEvent) {
 }
 
 function createNote() {
-    emit('create', props.uuid, textValue.value);
-    isEditing.value = false;
+    if (isEditing) {
+        emit('create', props.uuid, textValue.value);
+        isEditing.value = false;
+    }
 }
 
 function deleteNote() {
@@ -38,7 +40,7 @@ function deleteNote() {
 <template>
     <div
         class="note-content"
-        v-click-outside="() => isEditing=false"
+        v-click-outside="() => createNote()"
         @click="isEditing=true"
     >
         <textarea
@@ -48,10 +50,10 @@ function deleteNote() {
             id="text"
             @keydown="handleKeyDown"
         />
-        <div v-else class="display-wrapper">
+        <div v-else>
             <p class="note-text">{{ textBody }}</p>
-            <Button @click="deleteNote"/>
         </div>
+        <Button class="note-btn delete" @click="deleteNote"/>
     </div>
 </template>
 <style lang="scss" scoped>
@@ -62,11 +64,52 @@ function deleteNote() {
 
 .note-content {
     position: relative;
-    .display-wrapper {
-        position: relative;
+    overflow-y: auto;
+    overflow-x: hidden;
+    text-align: justify;
+    text-justify: inter-word;
+    white-space: pre-wrap;
+
+    textarea {
+        overflow: visible;
+    }
+
+    &:hover .note-btn {
+        opacity: 1;
     }
 }
 
+.note-content::-webkit-scrollbar {
+    width: 2px;
+}
+
+.note-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.note-content::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    background-clip: content-box;
+}
+
+.note-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border-width: 0;
+    border-radius: 3px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+
+    &.delete {
+        background-color: #f44336;
+    }
+}
 
 #text {
     resize: none;
