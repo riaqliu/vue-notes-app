@@ -110,6 +110,7 @@ const minimizeButton = computed(() => {
     display: flex;
     align-items: center;
     justify-content: center;
+    user-select: none;
     &:hover {
         width: 146px;
         cursor: pointer;
