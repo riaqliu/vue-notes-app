@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 const emit = defineEmits<{
     click: void
 }>()
@@ -7,9 +6,13 @@ const emit = defineEmits<{
 </script>
 <template>
 <button @click="emit('click')">
-    <img src="@/assets/icon/delete.svg" alt="Delete" class="delete-icon"/>
+    <img src="@/assets/icon/delete-white.svg" alt="Delete" class="delete-icon"/>
 </button>
 </template>
-<style>
-
+<style lang="scss" scoped>
+img {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
 </style>
