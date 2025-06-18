@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 
-import './stylesheets/default.css'
+import './stylesheets/default.scss'
 
 import clickOutside from './directives/v-click-outside';
 
