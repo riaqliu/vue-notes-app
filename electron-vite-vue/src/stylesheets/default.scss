@@ -1,12 +1,16 @@
 $neutral-teal: #3EB489;
 $light-teal: #89e2c0;
+$shadow-teal: #aec7b1;
 
 body {
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   background-color: $neutral-teal;
+  overflow: hidden;
+  margin: 0;
 }
 
 #app {
   max-width: 600px;
   max-height: 800px;
+  height: 100vh;
 }

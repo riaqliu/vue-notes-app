@@ -10,7 +10,8 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     create: [uuid: number, newText: string],
-    delete: [uuid: number]
+    delete: [uuid: number],
+    expand: [uuid: number]
 }>()
 
 const isEditing = ref(true);
@@ -36,6 +37,10 @@ function deleteNote() {
     emit('delete', props.uuid);
 }
 
+function expandNote() {
+    emit('expand', props.uuid);
+}
+
 </script>
 <template>
     <div
@@ -55,17 +60,16 @@ function deleteNote() {
         </div>
         <div class="note-options">
             <Button delete class="note-btn delete" @click="deleteNote"/>
-            <Button expand class="note-btn"/>
+            <Button expand class="note-btn" @click="expandNote"/>
         </div>
     </div>
 </template>
 <style lang="scss" scoped>
-#text {
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    resize: none;
-}
+@use "@/stylesheets/default.scss" as *;
 
-.note-content {
+.note-content { 
+    background-color: rgb(250, 250, 250);
+    font-size: 12px;
     position: relative;
     overflow-y: auto;
     overflow-x: hidden;
@@ -77,8 +81,11 @@ function deleteNote() {
         overflow: visible;
     }
 
-    &:hover .note-btn {
-        opacity: 1;
+    &:hover {
+        box-shadow: 0 0 3px $shadow-teal;
+        .note-btn {
+            opacity: 1;
+        }
     }
 }
 
@@ -113,18 +120,44 @@ function deleteNote() {
     border-radius: 3px;
     cursor: pointer;
     opacity: 0;
+    transform: translateY(0);
     transition: opacity 0.2s ease;
 
     &.delete {
         background-color: #f44336;
     }
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 3px $shadow-teal;
+        transition: transform 0.2s ease;
+    }
 }
 
 #text {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    position: relative;
     resize: none;
     width: 100%;
-    height: 100%;
-    border: 0;
+    height: 95%;
+    border-width: 0;
+    margin: 0;
+    padding: 0;
+    outline: none; // Remove blue outline on focus
     background-color: transparent;
+
+    &::-webkit-scrollbar {
+        width: 2px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.2);
+        border-radius: 4px;
+        background-clip: content-box;
+    }
 }
 </style>

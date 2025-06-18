@@ -2,19 +2,17 @@
 
 </script>
 <template>
-    <div class="content">
+    <div>
         <div class="app-title">
             Notes
         </div>
     </div>
 </template>
 <style lang="css" scoped>
-.content {
-    display: flex;
-}
-
 .app-title {
     font-size: xx-large;
     font-weight: bolder;
+    margin: 1vh 2vw;
+    color: white;
 }
 </style>
