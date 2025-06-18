@@ -53,7 +53,10 @@ function deleteNote() {
         <div v-else>
             <p class="note-text">{{ textBody }}</p>
         </div>
-        <Button class="note-btn delete" @click="deleteNote"/>
+        <div class="note-options">
+            <Button delete class="note-btn delete" @click="deleteNote"/>
+            <Button expand class="note-btn"/>
+        </div>
     </div>
 </template>
 <style lang="scss" scoped>
@@ -93,10 +96,16 @@ function deleteNote() {
     background-clip: content-box;
 }
 
-.note-btn {
+.note-options {
     position: absolute;
     top: 0.5rem;
     right: 0.5rem;
+    display: flex;
+    flex-direction: column; // Stack children vertically
+    gap: 0.25rem; // Optional: space between buttons
+}
+
+.note-btn {
     width: 24px;
     height: 24px;
     padding: 0;

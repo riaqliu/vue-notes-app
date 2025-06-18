@@ -1,4 +1,9 @@
 <script setup lang="ts">
+const props = defineProps<{
+    delete: boolean,
+    expand: boolean
+}>()
+
 const emit = defineEmits<{
     click: void
 }>()
@@ -6,7 +11,8 @@ const emit = defineEmits<{
 </script>
 <template>
 <button @click="emit('click')">
-    <img src="@/assets/icon/delete-white.svg" alt="Delete" class="delete-icon"/>
+    <img v-if="delete" src="@/assets/icon/delete-white.svg" alt="Delete"/>
+    <img v-else-if="expand" src="@/assets/icon/expand-black.svg" alt="Expand">
 </button>
 </template>
 <style lang="scss" scoped>
