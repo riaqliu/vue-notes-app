@@ -62,7 +62,7 @@ function minimizeNote() {
             @keydown="handleKeyDown"
         />
         <div class="note-options">
-            <Button delete class="note-btn delete" @click="deleteNote"/>
+            <Button light delete class="note-btn delete" @click="deleteNote"/>
             <Button v-if="isExpanded" minimize class="note-btn" @click="minimizeNote"/>
             <Button v-else expand class="note-btn" @click="expandNote"/>
         </div>
@@ -148,7 +148,7 @@ function minimizeNote() {
         transition: opacity 0.2s ease;
 
         &.delete {
-            background-color: #f44336;
+            background-color: red;
         }
 
         &:hover {

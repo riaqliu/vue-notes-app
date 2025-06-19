@@ -2,6 +2,7 @@
 import { reactive, ref, computed } from 'vue';
 import Header from '@/components/Header.vue';
 import NotesPageNoteItem from '@/components/NotesPageNoteItem.vue';
+import NotesPageHeader from '@/components/NotesPageHeader.vue';
 import Button from '@/components/generics/Button.vue';
 
 interface Note {
@@ -53,25 +54,28 @@ function minimizeNoteHandler(uuid: number) {
 <template>
     <div class="content">
         <Header/>
-        <div class="body">
-            <NotesPageNoteItem
-                v-for="(note, idx) in notes"
-                :class="{ expanded: note === expandedNote }"
-                class="item"
-                :key="idx"
-                :uuid="note.uuid"
-                :text-body="note.textBody"
-                :is-expanded="note === expandedNote"
-                @edit="editNoteHandler"
-                @delete="deleteNoteHandler"
-                @expand="expandNoteHandler"
-                @minimize="minimizeNoteHandler"
-            />
-            <Button
-                plus
-                :class="{ min: isToMinimizeButton }"
-                class="item btn"
-                @click="addNewNoteHandler"/>
+        <div class="page-content">
+            <NotesPageHeader/>
+            <div class="body">
+                <NotesPageNoteItem
+                    v-for="(note, idx) in notes"
+                    :class="{ expanded: note === expandedNote }"
+                    class="item"
+                    :key="idx"
+                    :uuid="note.uuid"
+                    :text-body="note.textBody"
+                    :is-expanded="note === expandedNote"
+                    @edit="editNoteHandler"
+                    @delete="deleteNoteHandler"
+                    @expand="expandNoteHandler"
+                    @minimize="minimizeNoteHandler"
+                />
+                <Button
+                    plus
+                    :class="{ min: isToMinimizeButton }"
+                    class="item btn"
+                    @click="addNewNoteHandler"/>
+            </div>
         </div>
     </div>
 </template>
@@ -83,17 +87,19 @@ function minimizeNoteHandler(uuid: number) {
     height: 100%;
 }
 
+.page-content {
+    height: 100%;
+    background-color: white;
+}
+
 .body {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
     align-content: flex-start;
     gap: 4px;
-
-    padding: 20px 24px;
-    background-color: white;
     height: 100%;
-
+    padding: 10px 24px 20px 24px;
     overflow-y: auto;
 }
 
@@ -118,9 +124,10 @@ function minimizeNoteHandler(uuid: number) {
     border-width: 0;
     padding: 6px;
     margin: 0.5vw;
-    transition: height 0.4s, width 0.6s;
+    transition: height 0.2s, width 0.2s;
 
     &.expanded {
+        order: -1;
         height: 50vh;
         width: 80rem;
         transition: height 1.1s, width 1.1s;
@@ -148,7 +155,7 @@ function minimizeNoteHandler(uuid: number) {
             transform: translateY(-2px);
             transition: width 0.3s ease, transform 0.2s, background-color 0.3s;
         }
-        :deep(img) {
+        :v-deep(img) {
             height: 20px;
             width: 20px; // Maintain aspect ratio
         }
@@ -164,7 +171,7 @@ function minimizeNoteHandler(uuid: number) {
             transform: translateY(0) ;
             transition: width 0.3s ease, transform 0.2s, background-color 0.3s;
         }
-        :deep(img) {
+        :v-deep(img) {
             height: 20px;
             width: 20px; // Maintain aspect ratio
         }
