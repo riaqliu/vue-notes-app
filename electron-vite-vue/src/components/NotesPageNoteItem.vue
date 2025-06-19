@@ -63,7 +63,6 @@ function expandNote() {
             @keydown="handleKeyDown"
         />
         <div v-else>
-            UUID: {{ props.uuid }}
             <p class="note-text">{{ textBody }}</p>
         </div>
         <div class="note-options">
