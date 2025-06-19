@@ -15,21 +15,14 @@ let nextId = 0;
 const view = ref<ViewModeTypes>('list');
 const expandedNote = ref<Note>(null);
 
-const minimizeButton = computed(() => {
+const isToMinimizeButton = computed(() => {
     return notes.length > 0;
 })
 const isExpanded = computed(() => {
-    return view === 'expanded';
-})
-const filteredNotes = computed(() => {
-    if (isExpanded.value)
-        return notes.findIndex(
-            (note) => note.uuid === expandedNotes.value
-        );
-    return notes;
+    return view.value === 'expanded';
 })
 
-function clickHandler() {
+function addNewNoteHandler() {
     const newNote = {
         uuid: ++nextId,
         textBody: ''
@@ -48,27 +41,37 @@ function deleteNoteHandler(uuid: number) {
 }
 function expandNoteHandler(uuid: number) {
     view.value = 'expanded';
+    const noteToExpand = notes.find((note) => note.uuid === uuid);
+    if (noteToExpand) expandedNote.value = noteToExpand;
 }
+function minimizeNoteHandler(uuid: number) {
+    view.value = 'list';
+    expandedNote.value = null;
+}
+
 </script>
 <template>
     <div class="content">
         <Header/>
         <div class="body">
             <NotesPageNoteItem
+                v-for="(note, idx) in notes"
+                :class="{ expanded: note === expandedNote }"
                 class="item"
-                v-for="(note, index) in notes"
-                :key="index"
+                :key="idx"
                 :uuid="note.uuid"
                 :text-body="note.textBody"
+                :is-expanded="note === expandedNote"
                 @edit="editNoteHandler"
                 @delete="deleteNoteHandler"
                 @expand="expandNoteHandler"
+                @minimize="minimizeNoteHandler"
             />
             <Button
                 plus
-                :class="{ min: minimizeButton }"
+                :class="{ min: isToMinimizeButton }"
                 class="item btn"
-                @click="clickHandler"/>
+                @click="addNewNoteHandler"/>
         </div>
     </div>
 </template>
@@ -115,18 +118,26 @@ function expandNoteHandler(uuid: number) {
     border-width: 0;
     padding: 12px;
     margin: 4px;
+    transition: height 0.4s, width 0.6s;
+
+    &.expanded {
+        height: 50vh;
+        width: 80rem;
+        transition: height 1.1s, width 1.1s;
+    }
 
     &.btn {
         background-color: rgb(240, 240, 240);
         font-size: 48px;
         transform: translateY(0);
-        transition: width 0.15s ease;
+        transition: width 0;
         height: 186px;
         width: 44vw;
         display: flex;
         align-items: center;
         justify-content: center;
         user-select: none;
+        transition: none;
         &:hover {
             width: 44vw;
             cursor: pointer;

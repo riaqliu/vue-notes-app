@@ -5,13 +5,15 @@ import Button from '@/components/generics/Button.vue';
 
 const props = defineProps<{
     uuid: number,
-    textBody?: string
+    textBody?: string,
+    isExpanded: boolean
 }>()
 
 const emit = defineEmits<{
     edit: [uuid: number, newText: string],
     delete: [uuid: number],
-    expand: [uuid: number]
+    expand: [uuid: number],
+    minimize: [uuid: number]
 }>()
 
 const isEditing = ref(true);
@@ -48,6 +50,12 @@ function expandNote() {
     emit('expand', props.uuid);
 }
 
+function minimizeNote() {
+    isEditing.value = false;
+    emit('minimize', props.uuid);
+}
+
+
 </script>
 <template>
     <div
@@ -67,7 +75,8 @@ function expandNote() {
         </div>
         <div class="note-options">
             <Button delete class="note-btn delete" @click="deleteNote"/>
-            <Button expand class="note-btn" @click="expandNote"/>
+            <Button v-if="isExpanded" minimize class="note-btn" @click="minimizeNote"/>
+            <Button v-else expand class="note-btn" @click="expandNote"/>
         </div>
     </div>
 </template>
