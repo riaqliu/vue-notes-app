@@ -155,7 +155,7 @@ function minimizeNoteHandler(uuid: number) {
             transform: translateY(-2px);
             transition: width 0.3s ease, transform 0.2s, background-color 0.3s;
         }
-        :v-deep(img) {
+        :deep(img) {
             height: 20px;
             width: 20px; // Maintain aspect ratio
         }
@@ -171,7 +171,7 @@ function minimizeNoteHandler(uuid: number) {
             transform: translateY(0) ;
             transition: width 0.3s ease, transform 0.2s, background-color 0.3s;
         }
-        :v-deep(img) {
+        :deep(img) {
             height: 20px;
             width: 20px; // Maintain aspect ratio
         }
