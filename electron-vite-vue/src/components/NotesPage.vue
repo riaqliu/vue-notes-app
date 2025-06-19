@@ -113,17 +113,21 @@ function minimizeNoteHandler(uuid: number) {
 
 .item {
     height: 165px;
-    width: 40vw;
+    width: 42vw;
     border-radius: 5px;
     border-width: 0;
-    padding: 12px;
-    margin: 4px;
+    padding: 6px;
+    margin: 0.5vw;
     transition: height 0.4s, width 0.6s;
 
     &.expanded {
         height: 50vh;
         width: 80rem;
         transition: height 1.1s, width 1.1s;
+
+        ::v-deep(textarea) {
+            height: 100%;
+        }
     }
 
     &.btn {

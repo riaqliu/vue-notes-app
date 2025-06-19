@@ -16,7 +16,6 @@ const emit = defineEmits<{
     minimize: [uuid: number]
 }>()
 
-const isEditing = ref(true);
 const textValue = ref('');
 
 watch(() => props.textBody, (newVal) => {
@@ -29,29 +28,24 @@ function handleKeyDown(event: KeyboardEvent) {
         if (!event.shiftKey) {
             event.preventDefault();
             editNote();
+            (event.target as HTMLElement).blur();
         }
     }
 }
 
 function editNote() {
-    if (isEditing.value) {
-        emit('edit', props.uuid, textValue.value);
-        isEditing.value = false;
-    }
+    emit('edit', props.uuid, textValue.value);
 }
 
 function deleteNote() {
-    isEditing.value = false;
     emit('delete', props.uuid);
 }
 
 function expandNote() {
-    isEditing.value = false;
     emit('expand', props.uuid);
 }
 
 function minimizeNote() {
-    isEditing.value = false;
     emit('minimize', props.uuid);
 }
 
@@ -61,18 +55,12 @@ function minimizeNote() {
     <div
         class="note-content"
         v-click-outside="() => editNote()"
-        @click="isEditing=true"
     >
         <textarea
-            v-if="isEditing"
             v-model="textValue"
             v-focus
-            id="text"
             @keydown="handleKeyDown"
         />
-        <div v-else>
-            <p class="note-text">{{ textBody }}</p>
-        </div>
         <div class="note-options">
             <Button delete class="note-btn delete" @click="deleteNote"/>
             <Button v-if="isExpanded" minimize class="note-btn" @click="minimizeNote"/>
@@ -87,14 +75,36 @@ function minimizeNote() {
     background-color: rgb(250, 250, 250);
     font-size: 12px;
     position: relative;
-    overflow-y: auto;
-    overflow-x: hidden;
-    text-align: justify;
-    text-justify: inter-word;
+    overflow: hidden;
     white-space: pre-wrap;
+    padding: 5px;
 
     textarea {
         overflow: visible;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        position: relative;
+        text-align: justify;
+        text-justify: inter-word;
+        resize: none;
+        width: 100%;
+        height: 100%;
+        border-width: 0;
+        outline: none;
+        background-color: transparent;
+
+        &::-webkit-scrollbar {
+            width: 2px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+            background-clip: content-box;
+        }
     }
 
     &:hover {
@@ -124,56 +134,28 @@ function minimizeNote() {
     top: 0.5rem;
     right: 0.5rem;
     display: flex;
-    flex-direction: column; // Stack children vertically
-    gap: 0.25rem; // Optional: space between buttons
-}
+    flex-direction: column;
+    gap: 0.25rem;
+    .note-btn {
+        width: 24px;
+        height: 24px;
+        padding: 0;
+        border-width: 0;
+        border-radius: 3px;
+        cursor: pointer;
+        opacity: 0;
+        transform: translateY(0);
+        transition: opacity 0.2s ease;
 
-.note-btn {
-    width: 24px;
-    height: 24px;
-    padding: 0;
-    border-width: 0;
-    border-radius: 3px;
-    cursor: pointer;
-    opacity: 0;
-    transform: translateY(0);
-    transition: opacity 0.2s ease;
+        &.delete {
+            background-color: #f44336;
+        }
 
-    &.delete {
-        background-color: #f44336;
-    }
-
-    &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 0 3px $shadow-teal;
-        transition: transform 0.2s ease;
-    }
-}
-
-#text {
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    position: relative;
-    resize: none;
-    width: 100%;
-    height: 95%;
-    border-width: 0;
-    margin: 0;
-    padding: 0;
-    outline: none; // Remove blue outline on focus
-    background-color: transparent;
-
-    &::-webkit-scrollbar {
-        width: 2px;
-    }
-
-    &::-webkit-scrollbar-track {
-        background: transparent;
-    }
-
-    &::-webkit-scrollbar-thumb {
-        background-color: rgba(0, 0, 0, 0.2);
-        border-radius: 4px;
-        background-clip: content-box;
+        &:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 0 3px $shadow-teal;
+            transition: transform 0.2s ease;
+        }
     }
 }
 </style>
