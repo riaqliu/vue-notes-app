@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
-import Button from '@/components/generic/Button.vue';
+import Button from '@/components/generics/Button.vue';
 
 const props = defineProps<{
     uuid: number,
@@ -9,7 +9,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-    create: [uuid: number, newText: string],
+    edit: [uuid: number, newText: string],
     delete: [uuid: number],
     expand: [uuid: number]
 }>()
@@ -17,27 +17,34 @@ const emit = defineEmits<{
 const isEditing = ref(true);
 const textValue = ref('');
 
+watch(() => props.textBody, (newVal) => {
+    if (newVal !== undefined)
+        textValue.value = newVal;
+}, {immediate: true});
+
 function handleKeyDown(event: KeyboardEvent) {
     if (event.key === 'Enter') {
         if (!event.shiftKey) {
             event.preventDefault();
-            createNote();
+            editNote();
         }
     }
 }
 
-function createNote() {
-    if (isEditing) {
-        emit('create', props.uuid, textValue.value);
+function editNote() {
+    if (isEditing.value) {
+        emit('edit', props.uuid, textValue.value);
         isEditing.value = false;
     }
 }
 
 function deleteNote() {
+    isEditing.value = false;
     emit('delete', props.uuid);
 }
 
 function expandNote() {
+    isEditing.value = false;
     emit('expand', props.uuid);
 }
 
@@ -45,7 +52,7 @@ function expandNote() {
 <template>
     <div
         class="note-content"
-        v-click-outside="() => createNote()"
+        v-click-outside="() => editNote()"
         @click="isEditing=true"
     >
         <textarea
@@ -56,6 +63,7 @@ function expandNote() {
             @keydown="handleKeyDown"
         />
         <div v-else>
+            UUID: {{ props.uuid }}
             <p class="note-text">{{ textBody }}</p>
         </div>
         <div class="note-options">
@@ -67,7 +75,7 @@ function expandNote() {
 <style lang="scss" scoped>
 @use "@/stylesheets/default.scss" as *;
 
-.note-content { 
+.note-content {
     background-color: rgb(250, 250, 250);
     font-size: 12px;
     position: relative;

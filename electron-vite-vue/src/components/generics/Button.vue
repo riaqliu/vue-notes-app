@@ -11,7 +11,7 @@ const emit = defineEmits<{
 
 </script>
 <template>
-<button @click="emit('click')">
+<button @click.stop="emit('click')">
     <img v-if="delete" src="@/assets/icon/delete-white.svg" alt="Delete"/>
     <img v-else-if="expand" src="@/assets/icon/expand-black.svg" alt="Expand">
     <img v-else-if="plus" src="@/assets/icon/plus-black.svg" alt="Expand">

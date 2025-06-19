@@ -2,7 +2,7 @@
 import { reactive, ref, computed } from 'vue';
 import Header from '@/components/Header.vue';
 import NotesPageNoteItem from '@/components/NotesPageNoteItem.vue';
-import Button from '@/components/generic/Button.vue';
+import Button from '@/components/generics/Button.vue';
 
 interface Note {
     uuid: number;
@@ -11,7 +11,7 @@ interface Note {
 type ViewModeTypes = 'list' | 'expanded';
 
 const notes = reactive<Note[]>([])
-const cnt = ref<number>(0);
+let nextId = 0;
 const view = ref<ViewModeTypes>('list');
 const expandedNote = ref<Note>(null);
 
@@ -30,15 +30,13 @@ const filteredNotes = computed(() => {
 })
 
 function clickHandler() {
-    cnt.value++;
-    notes.push(
-        {
-            uuid: cnt.value,
-            textBody: ''
-        }
-    )
+    const newNote = {
+        uuid: ++nextId,
+        textBody: ''
+    }
+    notes.push(newNote);
 }
-function createNoteHandler(uuid: number, newText: string) {
+function editNoteHandler(uuid: number, newText: string) {
     const updatedNote = notes.find((note) => note.uuid === uuid);
     if (updatedNote) updatedNote.textBody = newText;
 }
@@ -50,7 +48,6 @@ function deleteNoteHandler(uuid: number) {
 }
 function expandNoteHandler(uuid: number) {
     view.value = 'expanded';
-    console.log(uuid, view.value);
 }
 </script>
 <template>
@@ -59,10 +56,11 @@ function expandNoteHandler(uuid: number) {
         <div class="body">
             <NotesPageNoteItem
                 class="item"
-                v-for="note in notes"
+                v-for="(note, index) in notes"
+                :key="index"
                 :uuid="note.uuid"
                 :text-body="note.textBody"
-                @create="createNoteHandler"
+                @edit="editNoteHandler"
                 @delete="deleteNoteHandler"
                 @expand="expandNoteHandler"
             />
