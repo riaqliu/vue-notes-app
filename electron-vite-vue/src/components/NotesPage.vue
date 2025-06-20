@@ -9,19 +9,16 @@ interface Note {
     uuid: number;
     textBody: string;
 }
-type ViewModeTypes = 'list' | 'expanded';
+type ViewModeTypes = 'card' | 'list';
 
 const notes = reactive<Note[]>([])
 let nextId = 0;
-const view = ref<ViewModeTypes>('list');
+const view = ref<ViewModeTypes>('card');
 const expandedNote = ref<Note>(null);
 
 const isToMinimizeButton = computed(() => {
     return notes.length > 0;
-})
-const isExpanded = computed(() => {
-    return view.value === 'expanded';
-})
+});
 
 function addNewNoteHandler() {
     const newNote = {
@@ -41,13 +38,15 @@ function deleteNoteHandler(uuid: number) {
     }
 }
 function expandNoteHandler(uuid: number) {
-    view.value = 'expanded';
     const noteToExpand = notes.find((note) => note.uuid === uuid);
     if (noteToExpand) expandedNote.value = noteToExpand;
 }
 function minimizeNoteHandler(uuid: number) {
-    view.value = 'list';
     expandedNote.value = null;
+}
+function toggleViewHandler() {
+    if (view.value === 'card') view.value = 'list';
+    else view.value = 'card';
 }
 
 </script>
@@ -55,7 +54,10 @@ function minimizeNoteHandler(uuid: number) {
     <div class="content">
         <Header/>
         <div class="page-content">
-            <NotesPageHeader/>
+            <NotesPageHeader
+                :current-view="view"
+                @toggle-view="toggleViewHandler"
+            />
             <div class="body">
                 <NotesPageNoteItem
                     v-for="(note, idx) in notes"
@@ -124,7 +126,6 @@ function minimizeNoteHandler(uuid: number) {
     border-width: 0;
     padding: 6px;
     margin: 0.5vw;
-    transition: height 0.2s, width 0.2s;
 
     &.expanded {
         order: -1;

@@ -136,6 +136,7 @@ function minimizeNote() {
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
+
     .note-btn {
         width: 24px;
         height: 24px;

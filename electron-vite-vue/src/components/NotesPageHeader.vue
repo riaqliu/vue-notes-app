@@ -1,10 +1,18 @@
 <script setup lang="ts">
 import Button from '@/components/generics/Button.vue';
 
+const props = defineProps<{
+    currentView: string
+}>();
+
+const emit = defineEmits<{
+    toggleView: void,
+}>();
+
 </script>
 <template>
 <div class="notes-page-header">
-    <Button menu class="toggle-view-btn"/>
+    <Button menu class="toggle-view-btn" @click="emit('toggleView')"/>
     <Button delete class="delete-btn"/>
     <Button plus class="add-btn"/>
 </div>
@@ -41,9 +49,6 @@ import Button from '@/components/generics/Button.vue';
 
 .toggle-view-btn {
     margin-left: 20px;
-    &:hover {
-        background-color: $light-teal;
-    }
 }
 .delete-btn {
     ::v-deep(img) {
