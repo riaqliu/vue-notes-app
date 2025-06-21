@@ -141,7 +141,6 @@ function toggleViewHandler() {
     width: 42vw;
 
     &.expanded {
-        order: -1;
         height: 50vh;
         width: 80rem;
         transition: height 0.4s, width 1.1s;

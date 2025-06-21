@@ -15,6 +15,7 @@ const emit = defineEmits<{
 <template>
 <div class="notes-page-header">
     <Button menu class="toggle-view-btn" @click="emit('toggleView')"/>
+    <input type="text" class="search-input" placeholder="Search notes..." />
     <Button plus class="add-btn" @click="emit('addNewNote')"/>
     <Button delete class="delete-btn" @click="emit('deleteAll')"/>
 </div>
@@ -22,14 +23,23 @@ const emit = defineEmits<{
 <style lang="scss" scoped>
 @use "@/stylesheets/default.scss" as *;
 .notes-page-header {
-    width:100%;
-    padding: 5px;
-    padding-top: 12px;
+    flex: 0;
+    padding: 8px 28px 0 28px;
     display: flex;
     justify-content: flex-start;
     align-content: center;
     gap: 8px;
 }
+
+.search-input {
+    height: 36px;
+    flex: 1;
+    padding: 0 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    min-width: 0;
+}
+
 
 .toggle-view-btn,
 .delete-btn,
@@ -47,10 +57,6 @@ const emit = defineEmits<{
         box-shadow: 0 0 3px $shadow-teal;
         transition: transform 0.2s ease, background-color 0.2s;
     }
-}
-
-.toggle-view-btn {
-    margin-left: 20px;
 }
 .delete-btn {
     ::v-deep(img) {
@@ -70,5 +76,4 @@ const emit = defineEmits<{
         left: 0.5rem;
     }
 }
-
 </style>
