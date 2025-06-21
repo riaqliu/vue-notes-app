@@ -6,15 +6,17 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-    toggleView: void,
+    toggleView: [],
+    deleteAll: [],
+    addNewNote: []
 }>();
 
 </script>
 <template>
 <div class="notes-page-header">
     <Button menu class="toggle-view-btn" @click="emit('toggleView')"/>
-    <Button delete class="delete-btn"/>
-    <Button plus class="add-btn"/>
+    <Button delete class="delete-btn" @click="emit('deleteAll')"/>
+    <Button plus class="add-btn" @click="emit('addNewNote')"/>
 </div>
 </template>
 <style lang="scss" scoped>

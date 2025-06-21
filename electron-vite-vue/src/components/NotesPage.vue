@@ -14,7 +14,7 @@ type ViewModeTypes = 'card' | 'list';
 const notes = reactive<Note[]>([])
 let nextId = 0;
 const view = ref<ViewModeTypes>('card');
-const expandedNote = ref<Note>(null);
+const expandedNote = ref<Note | null>(null);
 
 const isToMinimizeButton = computed(() => {
     return notes.length > 0;
@@ -57,6 +57,8 @@ function toggleViewHandler() {
             <NotesPageHeader
                 :current-view="view"
                 @toggle-view="toggleViewHandler"
+                @delete-all="notes.splice(0,notes.length)"
+                @add-new-note="addNewNoteHandler"
             />
             <div class="body">
                 <NotesPageNoteItem
@@ -106,7 +108,7 @@ function toggleViewHandler() {
 }
 
 .body::-webkit-scrollbar {
-    width: 2px;
+    width: 6px;
 }
 
 .body::-webkit-scrollbar-track {

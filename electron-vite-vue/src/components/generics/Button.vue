@@ -9,7 +9,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-    click: void
+    click: []
 }>()
 
 </script>
