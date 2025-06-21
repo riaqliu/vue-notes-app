@@ -72,7 +72,7 @@ function minimizeNote() {
 @use "@/stylesheets/default.scss" as *;
 
 .note-content {
-    background-color: rgb(250, 250, 250);
+    background-color: rgb(230, 230, 230);
     font-size: 12px;
     position: relative;
     overflow: hidden;
@@ -147,6 +147,7 @@ function minimizeNote() {
         opacity: 0;
         transform: translateY(0);
         transition: opacity 0.2s ease;
+        background-color: white;
 
         &.delete {
             background-color: red;

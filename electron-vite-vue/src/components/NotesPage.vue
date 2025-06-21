@@ -19,6 +19,9 @@ const expandedNote = ref<Note | null>(null);
 const isToMinimizeButton = computed(() => {
     return notes.length > 0;
 });
+const isListView = computed(() => {
+    return view.value === 'list';
+});
 
 function addNewNoteHandler() {
     const newNote = {
@@ -63,7 +66,7 @@ function toggleViewHandler() {
             <div class="body">
                 <NotesPageNoteItem
                     v-for="(note, idx) in notes"
-                    :class="{ expanded: note === expandedNote }"
+                    :class="{ expanded: note === expandedNote, list: isListView}"
                     class="item"
                     :key="idx"
                     :uuid="note.uuid"
@@ -138,7 +141,7 @@ function toggleViewHandler() {
         order: -1;
         height: 50vh;
         width: 80rem;
-        transition: height 1.1s, width 1.1s;
+        transition: height 0.4s, width 1.1s;
 
         ::v-deep(textarea) {
             height: 100%;
@@ -182,6 +185,29 @@ function toggleViewHandler() {
         :deep(img) {
             height: 20px;
             width: 20px; // Maintain aspect ratio
+        }
+    }
+
+    &.list {
+        height: 20px;
+        width: 80rem;
+        transition: height 0.3s ease, width 1s ease;
+        :deep(.note-options) {
+            top: 0.2rem;
+            right: 0.2rem;
+            flex-direction: row;
+        }
+        &.expanded {
+            order: unset;
+            height: 50vh;
+            cursor: pointer;
+            transform: translateY(-2px);
+            :deep(.note-options) {
+                top: 0.5rem;
+                right: 0.5rem;
+                gap: 0.25rem;
+                flex-direction: column;
+            }
         }
     }
 }
