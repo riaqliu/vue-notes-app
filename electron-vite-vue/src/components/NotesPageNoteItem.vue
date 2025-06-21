@@ -17,7 +17,7 @@ const emit = defineEmits<{
 }>()
 
 const textValue = ref('');
-const showPlaceholder = ref(true);
+const showPlaceholder = ref(false);
 
 watch(() => props.textBody, (newVal) => {
     if (newVal !== undefined)

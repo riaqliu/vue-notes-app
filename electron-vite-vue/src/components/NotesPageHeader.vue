@@ -15,8 +15,8 @@ const emit = defineEmits<{
 <template>
 <div class="notes-page-header">
     <Button menu class="toggle-view-btn" @click="emit('toggleView')"/>
-    <Button delete class="delete-btn" @click="emit('deleteAll')"/>
     <Button plus class="add-btn" @click="emit('addNewNote')"/>
+    <Button delete class="delete-btn" @click="emit('deleteAll')"/>
 </div>
 </template>
 <style lang="scss" scoped>
