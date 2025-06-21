@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const props = defineProps<{
+defineProps<{
     delete?: boolean,
     expand?: boolean,
     minimize?: boolean,

@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import Button from '@/components/generics/Button.vue'
-
 </script>
 <template>
     <div class="header">

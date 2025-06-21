@@ -1,21 +1,52 @@
 <script setup lang="ts">
+import { ref, watch } from 'vue';
+import { debounce } from 'lodash-es';
 import Button from '@/components/generics/Button.vue';
-
-const props = defineProps<{
-    currentView: string
-}>();
 
 const emit = defineEmits<{
     toggleView: [],
     deleteAll: [],
-    addNewNote: []
+    addNewNote: [],
+    searchQuery: [string],
+    setIsSearching: [boolean]
 }>();
+
+const searchQuery = ref('');
+const isFocused = ref(false);
+const inputRef = ref<HTMLInputElement | null>(null);
+
+const debouncedSearch = debounce((query: string) => {
+    emit('searchQuery', query);
+}, 100);
+
+function handleFocus() {
+    isFocused.value = true;
+}
+function handleBlur() {
+    isFocused.value = false;
+}
+
+watch(isFocused, (focused) => {
+    emit('setIsSearching', focused);
+});
+watch(searchQuery, (newQuery) => {
+    debouncedSearch(newQuery);
+}, { immediate: true });
 
 </script>
 <template>
 <div class="notes-page-header">
     <Button menu class="toggle-view-btn" @click="emit('toggleView')"/>
-    <input type="text" class="search-input" placeholder="Search notes..." />
+    <input
+        ref="inputRef"
+        type="text"
+        class="search-input"
+        placeholder="Search notes..."
+        v-model="searchQuery"
+        @keyup.enter.prevent="($event.target as HTMLInputElement)?.blur()"
+        @focus="handleFocus"
+        @blur="handleBlur"
+    />
     <Button plus class="add-btn" @click="emit('addNewNote')"/>
     <Button delete class="delete-btn" @click="emit('deleteAll')"/>
 </div>

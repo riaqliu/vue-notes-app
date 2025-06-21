@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, ref, computed } from 'vue';
+import { reactive, ref, computed, nextTick } from 'vue';
 import Header from '@/components/Header.vue';
 import NotesPageNoteItem from '@/components/NotesPageNoteItem.vue';
 import NotesPageHeader from '@/components/NotesPageHeader.vue';
@@ -11,16 +11,23 @@ interface Note {
 }
 type ViewModeTypes = 'card' | 'list';
 
-const notes = reactive<Note[]>([])
 let nextId = 0;
+const notes = reactive<Note[]>([]);
 const view = ref<ViewModeTypes>('card');
 const expandedNote = ref<Note | null>(null);
+const searchQuery = ref<string>('');
+const isSearching = ref<boolean>(false);
 
 const isToMinimizeButton = computed(() => {
     return notes.length > 0;
 });
 const isListView = computed(() => {
     return view.value === 'list';
+});
+const filteredNotes = computed(() => {
+    return notes.filter(
+        note => note.textBody.toLowerCase().trim().includes(searchQuery.value)
+    );
 });
 
 function addNewNoteHandler() {
@@ -51,6 +58,9 @@ function toggleViewHandler() {
     if (view.value === 'card') view.value = 'list';
     else view.value = 'card';
 }
+function filterNotes(query: string) {
+    searchQuery.value = query.toLowerCase().trim();
+}
 
 </script>
 <template>
@@ -58,20 +68,22 @@ function toggleViewHandler() {
         <Header/>
         <div class="page-content">
             <NotesPageHeader
-                :current-view="view"
                 @toggle-view="toggleViewHandler"
                 @delete-all="notes.splice(0,notes.length)"
                 @add-new-note="addNewNoteHandler"
+                @search-query="filterNotes"
+                @set-is-searching="isSearching = $event"
             />
             <div class="body">
                 <NotesPageNoteItem
-                    v-for="(note, idx) in notes"
+                    v-for="(note, idx) in filteredNotes"
                     :class="{ expanded: note === expandedNote, list: isListView}"
                     class="item"
                     :key="idx"
                     :uuid="note.uuid"
                     :text-body="note.textBody"
                     :is-expanded="note === expandedNote"
+                    :is-searching="isSearching"
                     @edit="editNoteHandler"
                     @delete="deleteNoteHandler"
                     @expand="expandNoteHandler"

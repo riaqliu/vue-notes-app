@@ -1,28 +1,34 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
 
 import Button from '@/components/generics/Button.vue';
 
-const props = defineProps<{
-    uuid: number,
-    textBody?: string,
-    isExpanded: boolean
-}>()
+const props = defineProps({
+    uuid: Number,
+    textBody: {
+        type: String,
+        default: ''
+    },
+    isExpanded: Boolean,
+    isSearching: {
+        type: Boolean,
+        default: false
+    }
+}
+)
 
 const emit = defineEmits<{
-    edit: [uuid: number, newText: string],
-    delete: [uuid: number],
-    expand: [uuid: number],
-    minimize: [uuid: number]
+    edit: [uuid: Number, newText: String],
+    delete: [uuid: Number],
+    expand: [uuid: Number],
+    minimize: [uuid: Number]
 }>()
 
 const textValue = ref('');
-const showPlaceholder = ref(false);
-
-watch(() => props.textBody, (newVal) => {
-    if (newVal !== undefined)
-        textValue.value = newVal;
-}, {immediate: true});
+const showPlaceholder = ref<Boolean>(false);
+const uuid = ref<Number>(props.uuid ?? 0);
+const isExpanded = computed(() => props.isExpanded);
+const isSearching = computed(() => props.isSearching);
 
 function handleKeyDown(event: KeyboardEvent) {
     if (event.key === 'Enter') {
@@ -35,20 +41,24 @@ function handleKeyDown(event: KeyboardEvent) {
 }
 
 function editNote() {
-    emit('edit', props.uuid, textValue.value);
+    emit('edit', uuid.value, textValue.value);
 }
 
 function deleteNote() {
-    emit('delete', props.uuid);
+    emit('delete', uuid.value);
 }
 
 function expandNote() {
-    emit('expand', props.uuid);
+    emit('expand', uuid.value);
 }
 
 function minimizeNote() {
-    emit('minimize', props.uuid);
+    emit('minimize', uuid.value);
 }
+
+watch(() => props.textBody, (newText) => {
+    textValue.value = newText;
+}, { immediate: true });
 
 
 </script>
@@ -59,11 +69,11 @@ function minimizeNote() {
     >
         <textarea
             v-model="textValue"
-            v-focus
             :placeholder="showPlaceholder ? 'Type your note here...' : ''"
             @keydown="handleKeyDown"
             @mouseenter="showPlaceholder = true"
             @mouseleave="showPlaceholder = false"
+            v-focus="!isSearching"
         />
         <div class="note-options">
             <Button light delete class="note-btn delete" @click="deleteNote"/>
