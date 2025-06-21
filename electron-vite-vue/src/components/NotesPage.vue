@@ -86,13 +86,18 @@ function toggleViewHandler() {
 <style lang="scss" scoped>
 @use "@/stylesheets/default.scss" as *;
 
-.content {
-    margin-bottom: 0;
-    height: 100%;
+.content, .page-content {
+  height: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
+.content {
+    margin-bottom: 0;
+}
 .page-content {
-    height: 100%;
     background-color: white;
 }
 
