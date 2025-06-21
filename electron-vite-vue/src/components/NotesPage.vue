@@ -55,8 +55,7 @@ function minimizeNoteHandler(uuid: number) {
     expandedNote.value = null;
 }
 function toggleViewHandler() {
-    if (view.value === 'card') view.value = 'list';
-    else view.value = 'card';
+    view.value = (view.value === 'card') ? 'list' : 'card';
 }
 function filterNotes(query: string) {
     searchQuery.value = query.toLowerCase().trim();
