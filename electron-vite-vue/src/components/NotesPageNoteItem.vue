@@ -112,7 +112,7 @@ function minimizeNote() {
     }
 
     &:hover {
-        box-shadow: 0 0 3px $shadow-teal;
+        box-shadow: 0 0 6px $shadow-teal;
         .note-btn {
             opacity: 1;
         }
@@ -159,7 +159,7 @@ function minimizeNote() {
 
         &:hover {
             transform: translateY(-1px);
-            box-shadow: 0 0 12px $shadow-teal;
+            box-shadow: 0 0 3px $shadow-teal;
             transition: transform 0.2s ease;
         }
     }
