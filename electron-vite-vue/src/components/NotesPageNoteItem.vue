@@ -17,6 +17,7 @@ const emit = defineEmits<{
 }>()
 
 const textValue = ref('');
+const showPlaceholder = ref(true);
 
 watch(() => props.textBody, (newVal) => {
     if (newVal !== undefined)
@@ -59,7 +60,10 @@ function minimizeNote() {
         <textarea
             v-model="textValue"
             v-focus
+            :placeholder="showPlaceholder ? 'Type your note here...' : ''"
             @keydown="handleKeyDown"
+            @mouseenter="showPlaceholder = true"
+            @mouseleave="showPlaceholder = false"
         />
         <div class="note-options">
             <Button light delete class="note-btn delete" @click="deleteNote"/>
@@ -155,7 +159,7 @@ function minimizeNote() {
 
         &:hover {
             transform: translateY(-1px);
-            box-shadow: 0 0 3px $shadow-teal;
+            box-shadow: 0 0 12px $shadow-teal;
             transition: transform 0.2s ease;
         }
     }
