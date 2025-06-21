@@ -79,8 +79,8 @@ function toggleViewHandler() {
                 />
                 <Button
                     plus
-                    :class="{ min: isToMinimizeButton }"
-                    class="item btn"
+                    :class="{ min: isToMinimizeButton && !isListView, list: isListView }"
+                    class="btn"
                     @click="addNewNoteHandler"/>
             </div>
         </div>
@@ -129,13 +129,16 @@ function toggleViewHandler() {
     background-clip: content-box;
 }
 
-.item {
-    height: 165px;
-    width: 42vw;
+.item, .btn {
     border-radius: 5px;
     border-width: 0;
     padding: 6px;
     margin: 0.5vw;
+}
+
+.item {
+    height: 165px;
+    width: 42vw;
 
     &.expanded {
         order: -1;
@@ -145,46 +148,6 @@ function toggleViewHandler() {
 
         ::v-deep(textarea) {
             height: 100%;
-        }
-    }
-
-    &.btn {
-        background-color: rgb(240, 240, 240);
-        font-size: 48px;
-        transform: translateY(0);
-        transition: width 0;
-        height: 186px;
-        width: 44vw;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        user-select: none;
-        transition: none;
-        &:hover {
-            width: 44vw;
-            cursor: pointer;
-            transform: translateY(-2px);
-            transition: width 0.3s ease, transform 0.2s, background-color 0.3s;
-        }
-        :deep(img) {
-            height: 20px;
-            width: 20px; // Maintain aspect ratio
-        }
-    }
-
-    &.min {
-        background-color: rgb(240, 240, 240);
-        width: 26px;
-        font-size: 24px;
-        transform: translateY(0);
-        &:hover {
-            background-color: $light-teal;
-            transform: translateY(0) ;
-            transition: width 0.3s ease, transform 0.2s, background-color 0.3s;
-        }
-        :deep(img) {
-            height: 20px;
-            width: 20px; // Maintain aspect ratio
         }
     }
 
@@ -209,6 +172,51 @@ function toggleViewHandler() {
                 flex-direction: column;
             }
         }
+    }
+}
+
+.btn {
+    background-color: rgb(240, 240, 240);
+    font-size: 48px;
+    transform: translateY(0);
+    transition: width 0;
+    height: 179px;
+    width: 44vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    transition: none;
+    &:hover {
+        width: 44vw;
+        cursor: pointer;
+        transform: translateY(-2px);
+        transition: width 0.3s ease, transform 0.2s, background-color 0.3s;
+        background-color: $light-teal;
+        transition: width 0.3s ease, transform 0.2s, background-color 0.3s;
+    }
+    &.list {
+        height: 30px;
+        width: 80rem;
+    }
+
+    :deep(img) {
+        height: 20px;
+        width: 20px; // Maintain aspect ratio
+    }
+}
+
+.min {
+    background-color: rgb(240, 240, 240);
+    width: 26px;
+    font-size: 24px;
+    transform: translateY(0);
+    &:hover {
+        transform: translateY(0) ;
+    }
+    :deep(img) {
+        height: 20px;
+        width: 20px; // Maintain aspect ratio
     }
 }
 
