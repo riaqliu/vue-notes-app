@@ -4,7 +4,10 @@ import { ref, watch, computed } from 'vue';
 import Button from '@/components/generics/Button.vue';
 
 const props = defineProps({
-    uuid: Number,
+    uuid: {
+        type: Number,
+        required: true
+    },
     textBody: {
         type: String,
         default: ''
@@ -18,15 +21,14 @@ const props = defineProps({
 )
 
 const emit = defineEmits<{
-    edit: [uuid: Number, newText: String],
-    delete: [uuid: Number],
-    expand: [uuid: Number],
-    minimize: [uuid: Number]
+    edit: [object: { uuid: number; textBody: string }],
+    delete: [],
+    expand: [],
+    minimize: []
 }>()
 
-const textValue = ref('');
+const textValue = ref<string>('');
 const showPlaceholder = ref<Boolean>(false);
-const uuid = ref<Number>(props.uuid ?? 0);
 const isExpanded = computed(() => props.isExpanded);
 const isSearching = computed(() => props.isSearching);
 
@@ -41,19 +43,16 @@ function handleKeyDown(event: KeyboardEvent) {
 }
 
 function editNote() {
-    emit('edit', uuid.value, textValue.value);
+    emit('edit', { uuid: props.uuid, textBody: textValue.value });
 }
-
 function deleteNote() {
-    emit('delete', uuid.value);
+    emit('delete');
 }
-
 function expandNote() {
-    emit('expand', uuid.value);
+    emit('expand');
 }
-
 function minimizeNote() {
-    emit('minimize', uuid.value);
+    emit('minimize');
 }
 
 watch(() => props.textBody, (newText) => {

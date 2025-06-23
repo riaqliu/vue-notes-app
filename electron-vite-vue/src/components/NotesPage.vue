@@ -5,6 +5,9 @@ import NotesPageNoteItem from '@/components/NotesPageNoteItem.vue';
 import NotesPageHeader from '@/components/NotesPageHeader.vue';
 import Button from '@/components/generics/Button.vue';
 
+// TEST
+import { testPhrases } from '@/constants/testPhrases';
+
 interface Note {
     uuid: number;
     textBody: string;
@@ -31,27 +34,39 @@ const filteredNotes = computed(() => {
 });
 
 function addNewNoteHandler() {
-    const newNote = {
+    notes.push({
         uuid: ++nextId,
-        textBody: ''
-    }
-    notes.push(newNote);
+        textBody: `${nextId} ` + testPhrases[Math.floor(Math.random() * testPhrases.length)]
+    });
 }
-function editNoteHandler(uuid: number, newText: string) {
-    const updatedNote = notes.find((note) => note.uuid === uuid);
-    if (updatedNote) updatedNote.textBody = newText;
+function editNoteHandler({ uuid, textBody }: { uuid: number; textBody: string }) {
+    const note = notes.find(note => note.uuid === uuid);
+    if (note) {
+        note.textBody = textBody;
+    }
 }
 function deleteNoteHandler(uuid: number) {
-    const idx = notes.findIndex((note) => note.uuid === uuid);
-    if (idx !== -1) {
-        notes.splice(idx, 1);
+    const index = notes.findIndex(note => note.uuid === uuid);
+    if (index !== -1) {
+        notes.splice(index, 1);
+        if (expandedNote.value?.uuid === uuid) {
+            expandedNote.value = null;
+        }
     }
 }
 function expandNoteHandler(uuid: number) {
-    const noteToExpand = notes.find((note) => note.uuid === uuid);
-    if (noteToExpand) expandedNote.value = noteToExpand;
+    const note = notes.find(note => note.uuid === uuid);
+    if (note) {
+        expandedNote.value = note;
+        nextTick(() => {
+            const itemElement = document.querySelector(`.item.expanded`);
+            if (itemElement) {
+                itemElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    }
 }
-function minimizeNoteHandler(uuid: number) {
+function minimizeNoteHandler() {
     expandedNote.value = null;
 }
 function toggleViewHandler() {
@@ -75,17 +90,17 @@ function filterNotes(query: string) {
             />
             <div class="body">
                 <NotesPageNoteItem
-                    v-for="(note, idx) in filteredNotes"
+                    v-for="note in filteredNotes"
                     :class="{ expanded: note === expandedNote, list: isListView}"
                     class="item"
-                    :key="idx"
+                    :key="note.uuid"
                     :uuid="note.uuid"
                     :text-body="note.textBody"
                     :is-expanded="note === expandedNote"
                     :is-searching="isSearching"
-                    @edit="editNoteHandler"
-                    @delete="deleteNoteHandler"
-                    @expand="expandNoteHandler"
+                    @edit="editNoteHandler($event)"
+                    @delete="deleteNoteHandler(note.uuid)"
+                    @expand="expandNoteHandler(note.uuid)"
                     @minimize="minimizeNoteHandler"
                 />
                 <Button
@@ -144,27 +159,30 @@ function filterNotes(query: string) {
     border-radius: 5px;
     border-width: 0;
     padding: 6px;
-    margin: 0.5vw;
+    margin: 0.5vh 0.5vw;
+    &.list {
+        max-width: unset;
+        margin: 0.2vh 0;
+    }
 }
 
 .item {
     height: 165px;
-    width: 42vw;
-
+    width: 45vw;
+    max-width: 270px;
     &.expanded {
         height: 50vh;
-        width: 80rem;
+        width: 100vw;
+        max-width: unset;
         transition: height 0.4s, width 1.1s;
 
         ::v-deep(textarea) {
             height: 100%;
         }
     }
-
     &.list {
         height: 20px;
-        width: 80rem;
-        transition: height 0.3s ease, width 1s ease;
+        width: 100vw;
         :deep(.note-options) {
             top: 0.2rem;
             right: 0.2rem;
@@ -189,25 +207,25 @@ function filterNotes(query: string) {
     background-color: rgb(240, 240, 240);
     font-size: 48px;
     transform: translateY(0);
-    transition: width 0;
+    transition: unset;
     height: 179px;
-    width: 44vw;
+    width: 45vw;
+    max-width: 298px;
     display: flex;
     align-items: center;
     justify-content: center;
     user-select: none;
     transition: none;
     &:hover {
-        width: 44vw;
         cursor: pointer;
+        width: 45vw;
         transform: translateY(-2px);
-        transition: width 0.3s ease, transform 0.2s, background-color 0.3s;
+        transition: width 0.5s ease, transform 0.2s, background-color 0.3s;
         background-color: $light-teal;
-        transition: width 0.3s ease, transform 0.2s, background-color 0.3s;
     }
     &.list {
         height: 30px;
-        width: 80rem;
+        width: 100vw;
     }
 
     :deep(img) {
