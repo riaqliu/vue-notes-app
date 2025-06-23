@@ -1,4 +1,4 @@
-import { app, BrowserWindow, shell, ipcMain, Menu } from 'electron'
+import { app, BrowserWindow, shell, ipcMain, Menu, session } from 'electron'
 import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
@@ -45,9 +45,10 @@ const preload = path.join(__dirname, '../preload/index.mjs')
 const indexHtml = path.join(RENDERER_DIST, 'index.html')
 
 const windowParams: object = {
-  width: 600,
+  width: 660,
   height: 800,
-  resizable: false
+  minWidth: 660,
+  minHeight: 470,
 }
 
 async function createWindow() {
@@ -56,7 +57,7 @@ async function createWindow() {
     title: 'Main window',
     icon: path.join(process.env.VITE_PUBLIC, 'favicon.ico'),
     webPreferences: {
-      preload,
+      preload
       // Warning: Enable nodeIntegration and disable contextIsolation is not secure in production
       // nodeIntegration: true,
 
@@ -90,16 +91,6 @@ async function createWindow() {
 }
 
 app.whenReady().then(async () => {
-  if (VITE_DEV_SERVER_URL) {
-    try {
-      throw "TODO: add VUEJS Devtools";
-      console.info('Installed VueJS Devtools.');
-
-    } catch (e) {
-      console.error('Failed to install Vue Devtools:', e)
-    }
-  }
-
   createWindow()
 })
 
