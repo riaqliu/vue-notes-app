@@ -3,10 +3,10 @@ import { reactive, ref, computed, nextTick } from 'vue';
 import Header from '@/components/Header.vue';
 import NotesPageNoteItem from '@/components/NotesPageNoteItem.vue';
 import NotesPageHeader from '@/components/NotesPageHeader.vue';
-import Button from '@/components/generics/Button.vue';
+import Button from '@/components/__generics__/Button.vue';
 
 // TEST
-import { testPhrases } from '@/constants/testPhrases';
+// import { testPhrases } from '@/constants/testPhrases';
 
 interface Note {
     uuid: number;
@@ -36,7 +36,8 @@ const filteredNotes = computed(() => {
 function addNewNoteHandler() {
     notes.push({
         uuid: ++nextId,
-        textBody: `${nextId} ` + testPhrases[Math.floor(Math.random() * testPhrases.length)]
+        // textBody: `${nextId} ` + testPhrases[Math.floor(Math.random() * testPhrases.length)]
+        textBody: ''
     });
 }
 function editNoteHandler({ uuid, textBody }: { uuid: number; textBody: string }) {
@@ -176,6 +177,10 @@ function filterNotes(query: string) {
         max-width: unset;
         transition: height 0.4s, width 1.1s;
 
+        ::v-deep(.note-info),
+        ::v-deep(.note-btn) {
+            opacity: 1;
+        }
         ::v-deep(textarea) {
             height: 100%;
         }
@@ -183,21 +188,45 @@ function filterNotes(query: string) {
     &.list {
         height: 20px;
         width: 100vw;
-        :deep(.note-options) {
+        display: flex;
+        ::v-deep(.note-options) {
             top: 0.2rem;
             right: 0.2rem;
             flex-direction: row;
+        }
+        ::v-deep(.note-info) {
+            width: 9.5rem;
+            margin-right: 3rem;
+            display: flex;
+            align-items: center;
+            opacity: 0;
+            &:hover {
+                opacity: 1;
+            }
+        }
+        ::v-deep(textArea) {
+            overflow: hidden;
         }
         &.expanded {
             order: unset;
             height: 50vh;
             cursor: pointer;
             transform: translateY(-2px);
-            :deep(.note-options) {
+            ::v-deep(.note-options) {
                 top: 0.5rem;
                 right: 0.5rem;
                 gap: 0.25rem;
                 flex-direction: column;
+            }
+            ::v-deep(.note-info) {
+                position: absolute;
+                bottom: 0.5rem;
+                left: 0.5rem;
+                width: unset;
+                padding-right: unset;
+                display: unset;
+                align-items: unset;
+                opacity: 1;
             }
         }
     }

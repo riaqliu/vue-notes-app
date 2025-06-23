@@ -5,12 +5,12 @@
 - [x] **User Story 1** – Create a new note
 - [X] **User Story 2** – Edit an existing note
 - [X] **User Story 3** – Delete a note
-- [ ] **User Story 4** – View a list of all notes
-- [ ] **User Story 5** – View full content of a selected note
+- [X] **User Story 4** – View a list of all notes
+- [X] **User Story 5** – View full content of a selected note
 
 ## 🔍 Search and Organization
 
-- [ ] **User Story 6** – Search for notes by keyword
+- [X] **User Story 6** – Search for notes by keyword
 - [ ] **User Story 7** – Sort notes by creation date or title
 
 ## 🖍️ Note Formatting and Features

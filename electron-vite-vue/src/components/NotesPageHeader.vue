@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue';
 import { debounce } from 'lodash-es';
-import Button from '@/components/generics/Button.vue';
+import Button from '@/components/__generics__/Button.vue';
 
 const emit = defineEmits<{
     toggleView: [],

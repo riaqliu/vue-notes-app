@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue';
 
-import Button from '@/components/generics/Button.vue';
+import Button from '@/components/__generics__/Button.vue';
 
 const props = defineProps({
     uuid: {
@@ -11,6 +11,10 @@ const props = defineProps({
     textBody: {
         type: String,
         default: ''
+    },
+    dateCreated: {
+        type: Date,
+        default: () => new Date()
     },
     isExpanded: Boolean,
     isSearching: {
@@ -28,7 +32,6 @@ const emit = defineEmits<{
 }>()
 
 const textValue = ref<string>('');
-const showPlaceholder = ref<Boolean>(false);
 const isExpanded = computed(() => props.isExpanded);
 const isSearching = computed(() => props.isSearching);
 
@@ -45,15 +48,6 @@ function handleKeyDown(event: KeyboardEvent) {
 function editNote() {
     emit('edit', { uuid: props.uuid, textBody: textValue.value });
 }
-function deleteNote() {
-    emit('delete');
-}
-function expandNote() {
-    emit('expand');
-}
-function minimizeNote() {
-    emit('minimize');
-}
 
 watch(() => props.textBody, (newText) => {
     textValue.value = newText;
@@ -68,17 +62,18 @@ watch(() => props.textBody, (newText) => {
     >
         <textarea
             v-model="textValue"
-            :placeholder="showPlaceholder ? 'Type your note here...' : ''"
+            placeholder="Type your note here..."
             @keydown="handleKeyDown"
-            @mouseenter="showPlaceholder = true"
-            @mouseleave="showPlaceholder = false"
             v-focus="!isSearching"
         />
         <div class="note-options">
-            <Button light delete class="note-btn delete" @click="deleteNote"/>
-            <Button v-if="isExpanded" minimize class="note-btn" @click="minimizeNote"/>
-            <Button v-else expand class="note-btn" @click="expandNote"/>
+            <Button light delete class="note-btn delete" @click="emit('delete')"/>
+            <Button v-if="isExpanded" minimize class="note-btn" @click="emit('minimize')"/>
+            <Button v-else expand class="note-btn" @click="emit('expand')"/>
         </div>
+        <span class="note-info">
+            {{ props.dateCreated.toLocaleDateString() }} {{ props.dateCreated.toLocaleTimeString() }}
+        </span>
     </div>
 </template>
 <style lang="scss" scoped>
@@ -122,6 +117,7 @@ watch(() => props.textBody, (newText) => {
 
     &:hover {
         box-shadow: 0 0 6px $shadow-teal;
+        .note-info,
         .note-btn {
             opacity: 1;
         }
@@ -172,5 +168,16 @@ watch(() => props.textBody, (newText) => {
             transition: transform 0.2s ease;
         }
     }
+}
+
+.note-info {
+    position: absolute;
+    bottom: 0.5rem;
+    left: 0.5rem;
+    font-size: 10px;
+    color: $text-gray;
+    opacity: 0;
+    user-select: none;
+    -webkit-user-drag: none;
 }
 </style>
