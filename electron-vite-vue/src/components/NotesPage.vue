@@ -195,13 +195,15 @@ function filterNotes(query: string) {
             flex-direction: row;
         }
         ::v-deep(.note-info) {
-            width: 9.5rem;
-            margin-right: 3rem;
-            display: flex;
-            align-items: center;
             opacity: 0;
-            &:hover {
+        }
+        &:hover {
+            height: 40px;
+            transition: height 0.2s ease;
+
+            ::v-deep(.note-info) {
                 opacity: 1;
+                transition: opacity 0.4s ease;
             }
         }
         ::v-deep(textArea) {
