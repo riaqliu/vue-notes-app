@@ -215,7 +215,7 @@ function filterNotes(query: string) {
                 transition: opacity 0.4s ease;
             }
         }
-        ::v-deep(textArea) {
+        ::v-deep(.note-input) {
             overflow: hidden;
         }
         &.expanded {
