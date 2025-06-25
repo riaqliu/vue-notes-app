@@ -187,7 +187,7 @@ function filterNotes(query: string) {
         ::v-deep(.note-btn) {
             opacity: 1;
         }
-        ::v-deep(textarea) {
+        ::v-deep(.note-input) {
             height: 100%;
         }
     }
@@ -221,7 +221,6 @@ function filterNotes(query: string) {
         &.expanded {
             order: unset;
             height: 50vh;
-            cursor: pointer;
             transform: translateY(-2px);
             ::v-deep(.note-options) {
                 top: 0.5rem;
@@ -238,6 +237,9 @@ function filterNotes(query: string) {
                 display: unset;
                 align-items: unset;
                 opacity: 1;
+            }
+            ::v-deep(.note-input) {
+                height: 100%;
             }
         }
     }
