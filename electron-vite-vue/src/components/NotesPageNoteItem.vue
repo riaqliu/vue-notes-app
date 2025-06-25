@@ -32,6 +32,7 @@ const emit = defineEmits<{
 }>()
 
 const textValue = ref<string>('');
+const isFocused = ref<boolean>(false);
 const isExpanded = computed(() => props.isExpanded);
 const isSearching = computed(() => props.isSearching);
 
@@ -48,6 +49,10 @@ function handleKeyDown(event: KeyboardEvent) {
 function editNote() {
     emit('edit', { uuid: props.uuid, textBody: textValue.value });
 }
+function onContentInput(event: Event) {
+    const target = event.target as HTMLDivElement;
+    textValue.value = target.innerText;
+}
 
 watch(() => props.textBody, (newText) => {
     textValue.value = newText;
@@ -60,11 +65,20 @@ watch(() => props.textBody, (newText) => {
         class="note-content"
         v-click-outside="() => editNote()"
     >
-        <textarea
-            v-model="textValue"
-            placeholder="Type your note here..."
+        <div
+            class="note-placeholder"
+            v-if="!textValue && !isFocused"
+        >
+            Type your note here...
+        </div>
+        <div
+            class="note-input"
+            contenteditable="true"
+            @input="onContentInput"
             @keydown="handleKeyDown"
             v-focus="!isSearching"
+            @focus="isFocused = true"
+            @blur="isFocused = false"
         />
         <div class="note-options">
             <Button light delete class="note-btn delete" @click="emit('delete')"/>
@@ -87,18 +101,38 @@ watch(() => props.textBody, (newText) => {
     white-space: pre-wrap;
     padding: 5px;
 
-    textarea {
-        overflow: visible;
-        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    .note-input-wrapper {
         position: relative;
-        text-align: justify;
-        text-justify: inter-word;
-        resize: none;
         width: 100%;
         height: 100%;
-        border-width: 0;
+    }
+
+    .note-placeholder {
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        color: $text-gray;
+        pointer-events: none;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        padding: 2px;
+        opacity: 0.6;
+        white-space: pre-wrap;
+        user-select: none;
+    }
+
+    .note-input {
+        width: 100%;
+        height: 100%;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        text-align: justify;
+        text-justify: inter-word;
         outline: none;
+        border: none;
         background-color: transparent;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        overflow-y: auto;
+        padding: 2px;
 
         &::-webkit-scrollbar {
             width: 2px;

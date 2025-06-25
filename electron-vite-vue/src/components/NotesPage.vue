@@ -171,6 +171,12 @@ function filterNotes(query: string) {
     height: 165px;
     width: 45vw;
     max-width: 270px;
+
+    &:hover{
+        ::v-deep(.note-info) {
+            transition: opacity 0.2s ease;
+        }
+    }
     &.expanded {
         height: 50vh;
         width: 100vw;
@@ -193,6 +199,9 @@ function filterNotes(query: string) {
             top: 0.2rem;
             right: 0.2rem;
             flex-direction: row;
+        }
+        ::v-deep(.note-input) {
+            height: 20px;
         }
         ::v-deep(.note-info) {
             opacity: 0;
