@@ -8,7 +8,8 @@ const emit = defineEmits<{
     deleteAll: [],
     addNewNote: [],
     searchQuery: [string],
-    setIsSearching: [boolean]
+    setIsSearching: [boolean],
+    toggleSort: []
 }>();
 
 
@@ -52,7 +53,7 @@ watch(searchQuery, (newQuery) => {
         class="toggle-view-btn"
         @click="toggleView"
     />
-    <Button sortByAlphabet class="sort-btn"/>
+    <Button sortByAlphabet class="sort-btn" @click="emit('toggleSort')"/>
     <input
         ref="inputRef"
         type="text"

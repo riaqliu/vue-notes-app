@@ -11,12 +11,15 @@ import Button from '@/components/__generics__/Button.vue';
 interface Note {
     uuid: number;
     textBody: string;
+    created: Date;
 }
 type ViewModeTypes = 'card' | 'list';
+type SortTypes = 'none' | 'ascending' | 'descending'
 
 let nextId = 0;
 const notes = reactive<Note[]>([]);
 const view = ref<ViewModeTypes>('card');
+const sortMode = ref<SortTypes>('none');
 const expandedNote = ref<Note | null>(null);
 const searchQuery = ref<string>('');
 const isSearching = ref<boolean>(false);
@@ -30,14 +33,23 @@ const isListView = computed(() => {
 const filteredNotes = computed(() => {
     return notes.filter(
         note => note.textBody.toLowerCase().trim().includes(searchQuery.value)
-    );
+    ).sort((a,b) => {
+        if (sortMode.value === 'ascending') {
+            return a.created.getTime() > b.created.getTime() ? -1 : 1;
+        }
+        if (sortMode.value === 'descending') {
+            return a.created.getTime() < b.created.getTime() ? -1 : 1;
+        }
+        return 0;
+    });
 });
 
 function addNewNoteHandler() {
     notes.push({
         uuid: ++nextId,
         // textBody: `${nextId} ` + testPhrases[Math.floor(Math.random() * testPhrases.length)]
-        textBody: ''
+        textBody: '',
+        created: new Date()
     });
 }
 function editNoteHandler({ uuid, textBody }: { uuid: number; textBody: string }) {
@@ -73,6 +85,11 @@ function minimizeNoteHandler() {
 function toggleViewHandler() {
     view.value = (view.value === 'card') ? 'list' : 'card';
 }
+function toggleSortHandler() {
+    if(sortMode.value === 'none') sortMode.value = 'ascending';
+    else if(sortMode.value === 'ascending') sortMode.value = 'descending';
+    else if(sortMode.value === 'descending') sortMode.value = 'none';
+}
 function filterNotes(query: string) {
     searchQuery.value = query.toLowerCase().trim();
 }
@@ -88,6 +105,7 @@ function filterNotes(query: string) {
                 @add-new-note="addNewNoteHandler"
                 @search-query="filterNotes"
                 @set-is-searching="isSearching = $event"
+                @toggle-sort="toggleSortHandler"
             />
             <div class="body">
                 <NotesPageNoteItem
@@ -97,6 +115,7 @@ function filterNotes(query: string) {
                     :key="note.uuid"
                     :uuid="note.uuid"
                     :text-body="note.textBody"
+                    :date-created="note.created"
                     :is-expanded="note === expandedNote"
                     :is-searching="isSearching"
                     @edit="editNoteHandler($event)"
