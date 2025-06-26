@@ -66,10 +66,15 @@ watch(() => props.textBody, (newText) => {
         v-click-outside="() => editNote()"
     >
         <div
-            class="note-placeholder"
-            v-if="!textValue && !isFocused"
-        >
-            Type your note here...
+            class="note-title"
+            contenteditable="true"
+        > 
+            <div
+                class="note-placeholder"
+                v-if="!textValue && !isFocused"
+            >
+                Note title here...
+            </div>
         </div>
         <div
             class="note-input"
@@ -79,7 +84,14 @@ watch(() => props.textBody, (newText) => {
             v-focus="!isSearching"
             @focus="isFocused = true"
             @blur="isFocused = false"
-        />
+        >
+            <div
+                class="note-placeholder"
+                v-if="!textValue && !isFocused"
+            >
+                Type your note here...
+            </div>
+        </div>
         <div class="note-options">
             <Button light delete class="note-btn delete" @click="emit('delete')"/>
             <Button v-if="isExpanded" minimize class="note-btn" @click="emit('minimize')"/>
@@ -121,13 +133,13 @@ watch(() => props.textBody, (newText) => {
     }
 
     .note-input {
+        position: relative;
         width: 100%;
         height: 100%;
         font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
         text-align: justify;
         text-justify: inter-word;
         outline: none;
-        border: none;
         background-color: transparent;
         white-space: pre-wrap;
         word-wrap: break-word;

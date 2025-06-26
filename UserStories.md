@@ -11,7 +11,7 @@
 ## 🔍 Search and Organization
 
 - [X] **User Story 6** – Search for notes by keyword
-- [ ] **User Story 7** – Sort notes by creation date or title
+- [X] **User Story 7** – Sort notes by creation date or title
 
 ## 🖍️ Note Formatting and Features
 
